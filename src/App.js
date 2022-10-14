@@ -5,36 +5,25 @@ import { Table, Card } from "react-bootstrap";
 import { useState, useEffect, createContext, useContext } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 const DataContext = createContext();
-// const TimeContext = createContext();
 
 function MainTable() {
+    const { data, time } = useContext(DataContext);
+    console.log("Render Table");
+    const current = data[time[0]];
     return (
         <Table striped bordered hover>
             <thead>
                 <tr>
-                    <th>#</th>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Username</th>
+                    <th>Name</th>
+                    <th>Resource</th>
+                    <th>Value</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td>1</td>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                    <td>@fat</td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td colSpan={2}>Larry the Bird</td>
-                    <td>@twitter</td>
+                    <td>{current.name}</td>
+                    <td>{current.resource}</td>
+                    <td>{current.value}</td>
                 </tr>
             </tbody>
         </Table>
@@ -47,8 +36,9 @@ function showTime(timestamp: number) {
 }
 
 function Slider() {
-    const [time, setTime] = useState([0]);
-    const data = useContext(DataContext);
+    // const [time, setTime] = useState([0]);
+    const { data, time, setTime } = useContext(DataContext);
+    console.log("Render Slider");
     return (
         <>
             {data ? (
@@ -138,15 +128,9 @@ function Slider() {
     );
 }
 
-function extractword(str, start, end) {
-    var startindex = str.indexOf(start);
-    var endindex = str.indexOf(end, startindex) + 1;
-    if (startindex != -1 && endindex != -1 && endindex > startindex)
-        return str.slice(startindex, endindex);
-}
-
 function App() {
     const [data, setData] = useState(null);
+    const [time, setTime] = useState([0]);
     useEffect(() => {
         const data = fetch(
             "https://raw.githubusercontent.com/alexgavrushenko/lootbox/master/generated.log"
@@ -156,11 +140,11 @@ function App() {
                 const dataArr = data.split("\n").map(str => {
                     return str ? JSON.parse(str.replace(/'/g, '"')) : null;
                 });
-                dataArr.pop(); // TODO
+                dataArr.pop(); // TODO refactor
                 setData(dataArr);
             });
     }, []);
-
+    console.log("Render App");
     return (
         <div
             className="py-5"
@@ -170,7 +154,7 @@ function App() {
                 <Card>
                     <Card.Body>
                         <Card.Title>Wargaming Test Task</Card.Title>
-                        <DataContext.Provider value={data}>
+                        <DataContext.Provider value={{ data, time, setTime }}>
                             <MainTable />
                             <Slider />
                         </DataContext.Provider>
