@@ -9,7 +9,7 @@ const DataContext = createContext();
 function MainTable() {
     const { data, time } = useContext(DataContext);
     console.log("Render Table");
-    const current = data[time[0]];
+    const current = data ? data[time[0]] : null;
     return (
         <Table striped bordered hover>
             <thead>
@@ -20,11 +20,13 @@ function MainTable() {
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>{current.name}</td>
-                    <td>{current.resource}</td>
-                    <td>{current.value}</td>
-                </tr>
+                {current && (
+                    <tr>
+                        <td>{current.name}</td>
+                        <td>{current.resource}</td>
+                        <td>{current.value}</td>
+                    </tr>
+                )}
             </tbody>
         </Table>
     );
