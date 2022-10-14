@@ -100,18 +100,18 @@ function App() {
         )
             .then(res => res.text())
             .then(data => {
-                console.log(extractword(data, "{", "}"));
-                console.log(data);
-                return data;
+                const dataArr = data.split("\n").map(str => {
+                    return str ? JSON.parse(str.replace(/'/g, '"')) : null;
+                });
+                console.log(dataArr);
+                setData(dataArr);
             });
-        // useState(data);
     }, []);
 
     return (
         <MDBCard style={{ width: "600px" }}>
             <MDBCardBody>
                 <MainTable />
-                {data}
                 <Slider />
             </MDBCardBody>
         </MDBCard>
