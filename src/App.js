@@ -13,21 +13,18 @@ const current = {};
 
 const formCurrentState = (logObj: Object) => {
     const { name, resource, value } = logObj;
-    // if (Object.keys(current.all).includes(resource)) {
-    //     current.all[resource] += value;
-    // } else {
-    //     current.all[resource] = value;
-    // }
-    if (Object.keys(current).includes(name)) {
-        if (Object.keys(current[name]).includes(resource)) {
-            current[name][resource] += value;
+    if (Object.keys(current).includes(resource)) {
+        if (Object.keys(current[resource]).includes(name)) {
+            current[resource][name] += value;
         } else {
-            current[name] = Object.assign(current[name], { [resource]: value });
+            current[resource] = Object.assign(current[resource], {
+                [name]: value
+            });
         }
     } else {
-        current[name] = { [resource]: value };
+        current[resource] = { [name]: value };
     }
-    return JSON.stringify(current);
+    return JSON.stringify(current); // TODO refactoring
 };
 
 function App() {

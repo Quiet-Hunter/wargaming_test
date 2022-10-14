@@ -15,21 +15,30 @@ export function MainTable() {
                     <thead>
                         <tr>
                             <th>Name</th>
-                            {resourceNames.map((rn, i) => {
+                            <th>All</th>
+                            {usernames.map((rn, i) => {
                                 return <td key={i}>{rn}</td>;
                             })}
                         </tr>
                     </thead>
                     <tbody>
-                        {usernames.map((username, i) => {
+                        {resourceNames.map((resource, i) => {
+                            let summ = 0;
+                            if (current.hasOwnProperty(resource)) {
+                                console.log(current[resource]);
+                                summ = Object.values(current[resource]).reduce(
+                                    (a, b) => a + b
+                                );
+                            }
                             return (
                                 <tr key={i}>
-                                    <td>{username}</td>
-                                    {resourceNames.map((rn, i) => {
+                                    <td>{resource}</td>
+                                    <td>{summ}</td>
+                                    {usernames.map((rn, i) => {
                                         return (
                                             <td key={i}>
-                                                {(current[username] &&
-                                                    current[username][rn]) ||
+                                                {(current[resource] &&
+                                                    current[resource][rn]) ||
                                                     0}
                                             </td>
                                         );
