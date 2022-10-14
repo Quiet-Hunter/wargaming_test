@@ -22,11 +22,12 @@ function App() {
                         ? JSON.parse(str.replace(/'/g, '"'))
                         : null;
                     if (logObj) {
-                        const name = logObj.name;
-                        if (!Object.keys(logObj).includes(name)) {
-                            usersMap[name] = logObj.value;
+                        const { name, resource, value } = logObj;
+                        if (Object.keys(usersMap).includes(name)) {
+                            const userObj = usersMap[name];
+                            Object.assign(userObj, { [resource]: value });
                         } else {
-                            usersMap[name] += logObj.value;
+                            usersMap[name] = { [resource]: value };
                         }
                     }
                     return logObj;
