@@ -4,7 +4,7 @@ import { useContext } from "react";
 import { DataContext } from "./App";
 
 export function MainTable() {
-    const { data, time, usernames } = useContext(DataContext);
+    const { data, time, usernames, resourceNames } = useContext(DataContext);
     console.log("Render Table");
     const current = data ? data[time[0]] : null;
     console.log(current);
@@ -15,8 +15,9 @@ export function MainTable() {
                     <thead>
                         <tr>
                             <th>Name</th>
-                            <th>Silver</th>
-                            <th>Gold</th>
+                            {resourceNames.map((rn, i) => {
+                                return <td key={i}>{rn}</td>;
+                            })}
                         </tr>
                     </thead>
                     <tbody>
@@ -24,24 +25,23 @@ export function MainTable() {
                             return (
                                 <tr key={i}>
                                     <td>{username}</td>
-                                    <td>
-                                        {(current[username] &&
-                                            current[username].silver) ||
-                                            0}
-                                    </td>
-                                    <td>
-                                        {(current[username] &&
-                                            current[username].gold) ||
-                                            0}
-                                    </td>
+                                    {resourceNames.map((rn, i) => {
+                                        return (
+                                            <td>
+                                                {(current[username] &&
+                                                    current[username][rn]) ||
+                                                    0}
+                                            </td>
+                                        );
+                                    })}
                                 </tr>
                             );
                         })}
-                        <tr>
+                        {/* <tr>
                             <td>{"All"}</td>
                             <td>{current["all"].silver}</td>
                             <td>{current["all"].gold}</td>
-                        </tr>
+                        </tr> */}
                     </tbody>
                 </Table>
             )}

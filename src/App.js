@@ -8,15 +8,16 @@ import { Slider } from "./Slider";
 export const DataContext = createContext();
 
 const usernames = []; // TODO refactor
-const current = { all: {} };
+const resourceNames = [];
+const current = {};
 
 const formCurrentState = (logObj: Object) => {
     const { name, resource, value } = logObj;
-    if (Object.keys(current.all).includes(resource)) {
-        current.all[resource] += value;
-    } else {
-        current.all[resource] = value;
-    }
+    // if (Object.keys(current.all).includes(resource)) {
+    //     current.all[resource] += value;
+    // } else {
+    //     current.all[resource] = value;
+    // }
     if (Object.keys(current).includes(name)) {
         if (Object.keys(current[name]).includes(resource)) {
             current[name][resource] += value;
@@ -47,7 +48,9 @@ function App() {
                         if (!usernames.includes(name)) {
                             usernames.push(name);
                         }
-
+                        if (!resourceNames.includes(resource)) {
+                            resourceNames.push(resource);
+                        }
                         const formated = JSON.parse(formCurrentState(logObj));
                         // console.log(logObj.current);
                         Object.assign(formated, { timestamp });
@@ -69,7 +72,13 @@ function App() {
                             Wargaming Test Task
                         </Card.Title>
                         <DataContext.Provider
-                            value={{ data, time, setTime, usernames }}
+                            value={{
+                                data,
+                                time,
+                                setTime,
+                                usernames,
+                                resourceNames
+                            }}
                         >
                             <MainTable />
                             <Slider />
