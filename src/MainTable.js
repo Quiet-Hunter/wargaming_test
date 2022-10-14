@@ -1,5 +1,5 @@
 import React from "react";
-import { Table } from "react-bootstrap";
+import { Table, Spinner } from "react-bootstrap";
 import { useContext } from "react";
 import { DataContext } from "./App";
 
@@ -10,7 +10,7 @@ export function MainTable() {
     console.log(current);
     return (
         <>
-            {current && (
+            {current ? (
                 <Table striped bordered hover>
                     <thead>
                         <tr>
@@ -44,6 +44,18 @@ export function MainTable() {
                         </tr> */}
                     </tbody>
                 </Table>
+            ) : (
+                <div
+                    style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        margin: "40px"
+                    }}
+                >
+                    <Spinner animation="border" role="status">
+                        <span className="visually-hidden">Loading...</span>
+                    </Spinner>
+                </div>
             )}
         </>
     );
