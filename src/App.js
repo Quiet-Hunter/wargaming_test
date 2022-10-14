@@ -1,85 +1,139 @@
 import "./App.css";
 import React from "react";
-import {
-    MDBCard,
-    MDBCardBody,
-    MDBTable,
-    MDBTableHead,
-    MDBTableBody
-} from "mdb-react-ui-kit";
-import { Range } from "react-range";
-import { useState, useEffect } from "react";
+import { Range, getTrackBackground } from "react-range";
+import { Table, Card } from "react-bootstrap";
+import { useState, useEffect, createContext, useContext } from "react";
+import "bootstrap/dist/css/bootstrap.min.css";
+const DataContext = createContext();
+// const TimeContext = createContext();
 
 function MainTable() {
     return (
-        <MDBTable striped hover>
-            <MDBTableHead>
+        <Table striped bordered hover>
+            <thead>
                 <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">First</th>
-                    <th scope="col">Last</th>
-                    <th scope="col">Handle</th>
+                    <th>#</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Username</th>
                 </tr>
-            </MDBTableHead>
-            <MDBTableBody>
+            </thead>
+            <tbody>
                 <tr>
-                    <th scope="row">1</th>
+                    <td>1</td>
                     <td>Mark</td>
                     <td>Otto</td>
                     <td>@mdo</td>
                 </tr>
                 <tr>
-                    <th scope="row">2</th>
+                    <td>2</td>
                     <td>Jacob</td>
                     <td>Thornton</td>
                     <td>@fat</td>
                 </tr>
                 <tr>
-                    <th scope="row">3</th>
+                    <td>3</td>
                     <td colSpan={2}>Larry the Bird</td>
                     <td>@twitter</td>
                 </tr>
-            </MDBTableBody>
-        </MDBTable>
+            </tbody>
+        </Table>
     );
 }
 
+function showTime(timestamp: number) {
+    const date = new Date(timestamp * 1000);
+    return date.toDateString() + " " + date.toLocaleTimeString();
+}
+
 function Slider() {
-    const [values, setValues] = useState([50]);
+    const [time, setTime] = useState([0]);
+    const data = useContext(DataContext);
     return (
         <>
-            <Range
-                step={1}
-                min={0}
-                max={100}
-                values={values}
-                onChange={values => setValues(values)}
-                renderTrack={({ props, children }) => (
-                    <div
-                        {...props}
-                        style={{
-                            ...props.style,
-                            height: "6px",
-                            width: "100%",
-                            backgroundColor: "#ccc"
-                        }}
-                    >
-                        {children}
-                    </div>
-                )}
-                renderThumb={({ props }) => (
-                    <div
-                        {...props}
-                        style={{
-                            ...props.style,
-                            height: "42px",
-                            width: "42px",
-                            backgroundColor: "#999"
-                        }}
+            {data ? (
+                <div
+                    style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        flexWrap: "wrap",
+                        margin: "2em"
+                    }}
+                >
+                    <Range
+                        values={time}
+                        step={1}
+                        min={0}
+                        max={data.length - 1}
+                        onChange={values => setTime(values)}
+                        renderTrack={({ props, children }) => (
+                            <div
+                                onMouseDown={props.onMouseDown}
+                                onTouchStart={props.onTouchStart}
+                                style={{
+                                    ...props.style,
+                                    height: "36px",
+                                    display: "flex",
+                                    width: "100%"
+                                }}
+                            >
+                                <div
+                                    ref={props.ref}
+                                    style={{
+                                        height: "5px",
+                                        width: "100%",
+                                        borderRadius: "4px",
+                                        background: getTrackBackground({
+                                            values: time,
+                                            colors: ["#548BF4", "#ccc"],
+                                            min: 0,
+                                            max: data.length - 1
+                                        }),
+                                        alignSelf: "center"
+                                    }}
+                                >
+                                    {children}
+                                </div>
+                            </div>
+                        )}
+                        renderThumb={({ props, isDragged }) => (
+                            <div
+                                {...props}
+                                style={{
+                                    ...props.style,
+                                    height: "42px",
+                                    width: "42px",
+                                    borderRadius: "4px",
+                                    backgroundColor: "#FFF",
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    alignItems: "center",
+                                    boxShadow: "0px 2px 6px #AAA"
+                                }}
+                            >
+                                <div
+                                    style={{
+                                        height: "16px",
+                                        width: "5px",
+                                        backgroundColor: isDragged
+                                            ? "#548BF4"
+                                            : "#CCC"
+                                    }}
+                                />
+                            </div>
+                        )}
                     />
-                )}
-            />
-            {values}
+                    <output
+                        className={"example"}
+                        style={{
+                            marginTop: "30px"
+                        }}
+                        id="output"
+                    >
+                        {data[time] && showTime(data[time].timestamp)}
+                    </output>
+                </div>
+            ) : null}
         </>
     );
 }
@@ -93,7 +147,6 @@ function extractword(str, start, end) {
 
 function App() {
     const [data, setData] = useState(null);
-
     useEffect(() => {
         const data = fetch(
             "https://raw.githubusercontent.com/alexgavrushenko/lootbox/master/generated.log"
@@ -103,18 +156,28 @@ function App() {
                 const dataArr = data.split("\n").map(str => {
                     return str ? JSON.parse(str.replace(/'/g, '"')) : null;
                 });
-                console.log(dataArr);
+                dataArr.pop(); // TODO
                 setData(dataArr);
             });
     }, []);
 
     return (
-        <MDBCard style={{ width: "600px" }}>
-            <MDBCardBody>
-                <MainTable />
-                <Slider />
-            </MDBCardBody>
-        </MDBCard>
+        <div
+            className="py-5"
+            style={{ maxWidth: "1200px", textAlign: "center" }}
+        >
+            <div className="justify-content-center">
+                <Card>
+                    <Card.Body>
+                        <Card.Title>Wargaming Test Task</Card.Title>
+                        <DataContext.Provider value={data}>
+                            <MainTable />
+                            <Slider />
+                        </DataContext.Provider>
+                    </Card.Body>
+                </Card>
+            </div>
+        </div>
     );
 }
 
