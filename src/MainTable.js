@@ -4,33 +4,47 @@ import { useContext } from "react";
 import { DataContext } from "./App";
 
 export function MainTable() {
-    const { data, time, usersMap } = useContext(DataContext);
+    const { data, time, usernames } = useContext(DataContext);
     console.log("Render Table");
     const current = data ? data[time[0]] : null;
-    console.log(usersMap);
-
+    console.log(current);
     return (
-        <Table striped bordered hover>
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Silver</th>
-                    <th>Gold</th>
-                    <th>Value</th>
-                </tr>
-            </thead>
-            <tbody>
-                {Object.keys(usersMap).map((username, i) => {
-                    return (
-                        <tr key={i}>
-                            <td>{username}</td>
-                            <td>{current.resource}</td>
-                            <td>{current.resource}</td>
-                            <td>{current.value}</td>
+        <>
+            {current && (
+                <Table striped bordered hover>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Silver</th>
+                            <th>Gold</th>
                         </tr>
-                    );
-                })}
-            </tbody>
-        </Table>
+                    </thead>
+                    <tbody>
+                        {usernames.map((username, i) => {
+                            return (
+                                <tr key={i}>
+                                    <td>{username}</td>
+                                    <td>
+                                        {(current[username] &&
+                                            current[username].silver) ||
+                                            0}
+                                    </td>
+                                    <td>
+                                        {(current[username] &&
+                                            current[username].gold) ||
+                                            0}
+                                    </td>
+                                </tr>
+                            );
+                        })}
+                        <tr>
+                            <td>{"All"}</td>
+                            <td>{current["all"].silver}</td>
+                            <td>{current["all"].gold}</td>
+                        </tr>
+                    </tbody>
+                </Table>
+            )}
+        </>
     );
 }

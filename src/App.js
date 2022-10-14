@@ -7,7 +7,28 @@ import { MainTable } from "./MainTable";
 import { Slider } from "./Slider";
 export const DataContext = createContext();
 
-const usersMap = {};
+const usernames = []; // TODO refactor
+const current = { all: {} };
+
+const formCurrentState = (logObj: Object) => {
+    const { name, resource, value } = logObj;
+    if (Object.keys(current.all).includes(resource)) {
+        current.all[resource] += value;
+    } else {
+        current.all[resource] = value;
+    }
+    if (Object.keys(current).includes(name)) {
+        if (Object.keys(current[name]).includes(resource)) {
+            current[name][resource] += value;
+        } else {
+            current[name] = Object.assign(current[name], { [resource]: value });
+        }
+    } else {
+        current[name] = { [resource]: value };
+    }
+    return JSON.stringify(current);
+};
+
 function App() {
     const [data, setData] = useState(null);
     const [time, setTime] = useState([0]);
@@ -22,32 +43,33 @@ function App() {
                         ? JSON.parse(str.replace(/'/g, '"'))
                         : null;
                     if (logObj) {
-                        const { name, resource, value } = logObj;
-                        if (Object.keys(usersMap).includes(name)) {
-                            const userObj = usersMap[name];
-                            Object.assign(userObj, { [resource]: value });
-                        } else {
-                            usersMap[name] = { [resource]: value };
+                        const { name, resource, value, timestamp } = logObj;
+                        if (!usernames.includes(name)) {
+                            usernames.push(name);
                         }
+
+                        const formated = JSON.parse(formCurrentState(logObj));
+                        // console.log(logObj.current);
+                        Object.assign(formated, { timestamp });
+                        return formated;
                     }
-                    return logObj;
                 });
                 handledData.pop(); // TODO refactor
                 setData(handledData);
             });
     }, []);
     console.log("Render App");
+    console.log(data);
     return (
-        <div
-            className="py-5"
-            style={{ maxWidth: "1200px", textAlign: "center" }}
-        >
+        <div className="py-5" style={{ maxWidth: "1200px" }}>
             <div className="justify-content-center">
                 <Card>
                     <Card.Body>
-                        <Card.Title>Wargaming Test Task</Card.Title>
+                        <Card.Title style={{ textAlign: "center" }}>
+                            Wargaming Test Task
+                        </Card.Title>
                         <DataContext.Provider
-                            value={{ data, time, setTime, usersMap }}
+                            value={{ data, time, setTime, usernames }}
                         >
                             <MainTable />
                             <Slider />
