@@ -34,17 +34,18 @@ function App() {
     const [data, setData] = useState(null);
     const [time, setTime] = useState([0]);
     useEffect(() => {
-        const data = fetch(
+        fetch(
             "https://raw.githubusercontent.com/alexgavrushenko/lootbox/master/generated.log"
         )
             .then(response => response.text())
             .then(rawData => {
+                for (var line in current) delete current[line]; // TODO refactor
                 const handledData = rawData.split("\n").map(str => {
                     const logObj = str
                         ? JSON.parse(str.replace(/'/g, '"'))
                         : null;
                     if (logObj) {
-                        const { name, resource, value, timestamp } = logObj;
+                        const { name, resource, timestamp } = logObj;
                         if (!usernames.includes(name)) {
                             usernames.push(name);
                         }
@@ -52,12 +53,15 @@ function App() {
                             resourceNames.push(resource);
                         }
                         const formated = JSON.parse(formCurrentState(logObj));
-                        // console.log(logObj.current);
+                        // console.log(formated);
                         Object.assign(formated, { timestamp });
+                        // console.log(formated);
                         return formated;
                     }
+                    return null;
                 });
                 handledData.pop(); // TODO refactor
+                // console.log(handledData);
                 setData(handledData);
             });
     }, []);

@@ -27,7 +27,7 @@ export function MainTable() {
                                     <td>{username}</td>
                                     {resourceNames.map((rn, i) => {
                                         return (
-                                            <td>
+                                            <td key={i}>
                                                 {(current[username] &&
                                                     current[username][rn]) ||
                                                     0}
