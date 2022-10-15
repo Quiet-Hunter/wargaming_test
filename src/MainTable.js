@@ -25,7 +25,6 @@ export function MainTable() {
                         {resourceNames.map((resource, i) => {
                             let summ = 0;
                             if (current.hasOwnProperty(resource)) {
-                                console.log(current[resource]);
                                 summ = Object.values(current[resource]).reduce(
                                     (a, b) => a + b
                                 );
@@ -46,11 +45,6 @@ export function MainTable() {
                                 </tr>
                             );
                         })}
-                        {/* <tr>
-                            <td>{"All"}</td>
-                            <td>{current["all"].silver}</td>
-                            <td>{current["all"].gold}</td>
-                        </tr> */}
                     </tbody>
                 </Table>
             ) : (
