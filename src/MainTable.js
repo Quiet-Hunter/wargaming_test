@@ -1,13 +1,48 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { Table, Spinner } from "react-bootstrap";
 import { useContext } from "react";
 import { DataContext } from "./App";
 
+function ResourcePart({ resMap, resource }) {
+    const { usernames } = useContext(DataContext);
+    const sorted = [];
+    usernames.forEach(name => {
+        sorted.push([name, resMap && name in resMap ? resMap[name] : 0]);
+    });
+    // for (let name in resMap) {
+    //     sorted.push([name, resMap[name]]);
+    // }
+    sorted.sort(function (a, b) {
+        return b[1] - a[1];
+    });
+    return sorted.map(([name, value], i) => {
+        return (
+            <tr key={i}>
+                <td>{name}</td>
+                <td>{resource}</td>
+                <td>{value}</td>
+            </tr>
+        );
+    });
+}
+
 export function MainTable() {
-    const { data, time, usernames, resourceNames } = useContext(DataContext);
     console.log("Render Table");
+    const { data, time, usernames, resourceNames } = useContext(DataContext);
     const current = data ? data[time[0]] : null;
-    console.log(current);
+    const sortedResources = [];
+    if (current) {
+        resourceNames.forEach(resource => {
+            const summ =
+                resource in current
+                    ? Object.values(current[resource]).reduce((a, b) => a + b)
+                    : 0;
+            sortedResources.push([resource, summ]);
+        });
+        sortedResources.sort(function (a, b) {
+            return b[1] - a[1];
+        });
+    }
     return (
         <>
             {current ? (
@@ -15,14 +50,29 @@ export function MainTable() {
                     <thead>
                         <tr>
                             <th>Name</th>
-                            <th>All</th>
-                            {usernames.map((rn, i) => {
+                            <th>Resouce</th>
+                            <th>Value</th>
+                            {/* {usernames.map((rn, i) => {
                                 return <td key={i}>{rn}</td>;
-                            })}
+                            })} */}
                         </tr>
                     </thead>
                     <tbody>
-                        {resourceNames.map((resource, i) => {
+                        {sortedResources.map(([res, value], i) => (
+                            <Fragment key={i}>
+                                <tr>
+                                    <td></td>
+                                    <td>{res}</td>
+                                    <td>{value}</td>
+                                </tr>
+                                <ResourcePart
+                                    resMap={current[res]}
+                                    resource={res}
+                                    key={i}
+                                />
+                            </Fragment>
+                        ))}
+                        {/* {resourceNames.map((resource, i) => {
                             let summ = 0;
                             if (current.hasOwnProperty(resource)) {
                                 summ = Object.values(current[resource]).reduce(
@@ -44,7 +94,7 @@ export function MainTable() {
                                     })}
                                 </tr>
                             );
-                        })}
+                        })} */}
                     </tbody>
                 </Table>
             ) : (

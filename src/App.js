@@ -63,7 +63,7 @@ function App() {
             });
     }, []);
     console.log("Render App");
-    console.log(data);
+    // console.log(data);
     return (
         <div className="py-5" style={{ maxWidth: "1200px" }}>
             <div className="justify-content-center">
@@ -81,8 +81,8 @@ function App() {
                                 resourceNames
                             }}
                         >
-                            <MainTable />
                             <Slider />
+                            <MainTable />
                         </DataContext.Provider>
                     </Card.Body>
                 </Card>
