@@ -61,14 +61,14 @@ export function MainTable() {
                                 style={{ cursor: "pointer" }}
                                 onClick={() => setOrder(order * -1)}
                             >
-                                Value {order == -1 ? "↑" : "↓"}
+                                Value {order === -1 ? "↑" : "↓"}
                             </th>
                         </tr>
                     </thead>
                     <tbody>
                         {sortedResources.map(([res, value], i) => (
                             <Fragment key={i}>
-                                {order == -1 && (
+                                {order === -1 && (
                                     <tr>
                                         <td></td>
                                         <td>{res}</td>
@@ -80,7 +80,7 @@ export function MainTable() {
                                     resource={res}
                                     key={i}
                                 />
-                                {order == 1 && (
+                                {order === 1 && (
                                     <tr>
                                         <td></td>
                                         <td>{res}</td>

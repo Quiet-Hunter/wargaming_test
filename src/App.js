@@ -23,7 +23,7 @@ function App() {
             fetchData(data, setData);
             hasFetchedData.current = true;
         }
-    }, []);
+    }, [data]);
     return (
         <div className="py-5" style={{ maxWidth: "1200px", margin: "auto" }}>
             <div className="justify-content-center">

@@ -19,6 +19,8 @@ export const formCurrentState = (logObj: Object) => {
 };
 
 const parseData = rawData => {
+    if (Object.keys(current).length)
+        for (let prop in current) delete current[prop];
     return rawData.split("\n").map(str => {
         const logObj = str ? JSON.parse(str.replace(/'/g, '"')) : null;
         if (logObj) {
