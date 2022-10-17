@@ -3,64 +3,51 @@ import React from "react";
 import { Card } from "react-bootstrap";
 import { useState, useEffect, createContext } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { MainTable } from "./MainTable";
-import { Slider } from "./Slider";
+import { MainTable } from "./Components/MainTable";
+import { Slider } from "./Components/Slider";
+import { formCurrentState } from "./utils";
 export const DataContext = createContext();
 
 const usernames = []; // TODO refactor
 const resourceNames = [];
-const current = {};
+export const current = {};
 
-const formCurrentState = (logObj: Object) => {
-    const { name, resource, value } = logObj;
-    if (Object.keys(current).includes(resource)) {
-        if (Object.keys(current[resource]).includes(name)) {
-            current[resource][name] += value;
-        } else {
-            current[resource] = Object.assign(current[resource], {
-                [name]: value
+const fetchData = (data, setData) => {
+    fetch(
+        "https://raw.githubusercontent.com/alexgavrushenko/lootbox/master/generated.log"
+    )
+        .then(response => response.text())
+        .then(rawData => {
+            for (var line in current) delete current[line]; // TODO refactor
+            const handledData = rawData.split("\n").map(str => {
+                const logObj = str ? JSON.parse(str.replace(/'/g, '"')) : null;
+                if (logObj) {
+                    const { name, resource, timestamp } = logObj;
+                    if (!usernames.includes(name)) {
+                        usernames.push(name);
+                    }
+                    if (!resourceNames.includes(resource)) {
+                        resourceNames.push(resource);
+                    }
+                    const formated = JSON.parse(formCurrentState(logObj));
+                    // console.log(formated);
+                    Object.assign(formated, { timestamp });
+                    // console.log(formated);
+                    return formated;
+                }
+                return null;
             });
-        }
-    } else {
-        current[resource] = { [name]: value };
-    }
-    return JSON.stringify(current); // TODO refactoring
+            handledData.pop(); // TODO refactor
+            // console.log(handledData);
+            setData(handledData);
+        });
 };
 
 function App() {
     const [data, setData] = useState(null);
     const [time, setTime] = useState([0]);
     useEffect(() => {
-        fetch(
-            "https://raw.githubusercontent.com/alexgavrushenko/lootbox/master/generated.log"
-        )
-            .then(response => response.text())
-            .then(rawData => {
-                for (var line in current) delete current[line]; // TODO refactor
-                const handledData = rawData.split("\n").map(str => {
-                    const logObj = str
-                        ? JSON.parse(str.replace(/'/g, '"'))
-                        : null;
-                    if (logObj) {
-                        const { name, resource, timestamp } = logObj;
-                        if (!usernames.includes(name)) {
-                            usernames.push(name);
-                        }
-                        if (!resourceNames.includes(resource)) {
-                            resourceNames.push(resource);
-                        }
-                        const formated = JSON.parse(formCurrentState(logObj));
-                        // console.log(formated);
-                        Object.assign(formated, { timestamp });
-                        // console.log(formated);
-                        return formated;
-                    }
-                    return null;
-                });
-                handledData.pop(); // TODO refactor
-                // console.log(handledData);
-                setData(handledData);
-            });
+        fetchData(data, setData);
     }, []);
     console.log("Render App");
     // console.log(data);
@@ -76,12 +63,19 @@ function App() {
                             value={{
                                 data,
                                 time,
-                                setTime,
-                                usernames,
-                                resourceNames
+                                setTime
                             }}
                         >
                             <Slider />
+                        </DataContext.Provider>
+                        <DataContext.Provider
+                            value={{
+                                data,
+                                time,
+                                resourceNames,
+                                usernames
+                            }}
+                        >
                             <MainTable />
                         </DataContext.Provider>
                     </Card.Body>

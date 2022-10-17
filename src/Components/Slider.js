@@ -1,7 +1,7 @@
 import React from "react";
 import { Range, getTrackBackground } from "react-range";
 import { useContext } from "react";
-import { DataContext } from "./App";
+import { DataContext } from "../App";
 
 function showTime(timestamp: number) {
     const date = new Date(timestamp * 1000);

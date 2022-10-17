@@ -1,7 +1,7 @@
 import React, { Fragment } from "react";
 import { Table, Spinner } from "react-bootstrap";
 import { useContext } from "react";
-import { DataContext } from "./App";
+import { DataContext } from "../App";
 
 function ResourcePart({ resMap, resource }) {
     const { usernames } = useContext(DataContext);
@@ -28,7 +28,7 @@ function ResourcePart({ resMap, resource }) {
 
 export function MainTable() {
     console.log("Render Table");
-    const { data, time, usernames, resourceNames } = useContext(DataContext);
+    const { data, time, resourceNames } = useContext(DataContext);
     const current = data ? data[time[0]] : null;
     const sortedResources = [];
     if (current) {
@@ -52,9 +52,6 @@ export function MainTable() {
                             <th>Name</th>
                             <th>Resouce</th>
                             <th>Value</th>
-                            {/* {usernames.map((rn, i) => {
-                                return <td key={i}>{rn}</td>;
-                            })} */}
                         </tr>
                     </thead>
                     <tbody>
@@ -72,29 +69,6 @@ export function MainTable() {
                                 />
                             </Fragment>
                         ))}
-                        {/* {resourceNames.map((resource, i) => {
-                            let summ = 0;
-                            if (current.hasOwnProperty(resource)) {
-                                summ = Object.values(current[resource]).reduce(
-                                    (a, b) => a + b
-                                );
-                            }
-                            return (
-                                <tr key={i}>
-                                    <td>{resource}</td>
-                                    <td>{summ}</td>
-                                    {usernames.map((rn, i) => {
-                                        return (
-                                            <td key={i}>
-                                                {(current[resource] &&
-                                                    current[resource][rn]) ||
-                                                    0}
-                                            </td>
-                                        );
-                                    })}
-                                </tr>
-                            );
-                        })} */}
                     </tbody>
                 </Table>
             ) : (
