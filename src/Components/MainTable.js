@@ -1,10 +1,10 @@
 import React, { Fragment } from "react";
 import { Table, Spinner } from "react-bootstrap";
 import { useContext } from "react";
-import { DataContext } from "../App";
+import { DataContext, resourceNames, usernames } from "../App";
 
 function ResourcePart({ resMap, resource }) {
-    const { usernames } = useContext(DataContext);
+    // const { usernames } = useContext(DataContext);
     const sorted = [];
     usernames.forEach(name => {
         sorted.push([name, resMap && name in resMap ? resMap[name] : 0]);
@@ -27,8 +27,7 @@ function ResourcePart({ resMap, resource }) {
 }
 
 export function MainTable() {
-    console.log("Render Table");
-    const { data, time, resourceNames } = useContext(DataContext);
+    const { data, time } = useContext(DataContext);
     const current = data ? data[time[0]] : null;
     const sortedResources = [];
     if (current) {

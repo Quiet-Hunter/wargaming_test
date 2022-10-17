@@ -8,9 +8,7 @@ function showTime(timestamp: number) {
     return date.toDateString() + " " + date.toLocaleTimeString();
 }
 export function Slider() {
-    // const [time, setTime] = useState([0]);
     const { data, time, setTime } = useContext(DataContext);
-    console.log("Render Slider");
     return (
         <>
             {data ? (
