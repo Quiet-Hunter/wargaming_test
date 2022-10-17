@@ -68,25 +68,18 @@ export function MainTable() {
                     <tbody>
                         {sortedResources.map(([res, value], i) => (
                             <Fragment key={i}>
-                                {order === -1 && (
-                                    <tr>
-                                        <td></td>
-                                        <td>{res}</td>
-                                        <td>{value}</td>
-                                    </tr>
-                                )}
+                                <tr>
+                                    <td>
+                                        <strong>All</strong>
+                                    </td>
+                                    <td>{res}</td>
+                                    <td>{value}</td>
+                                </tr>
                                 <ResourcePart
                                     resMap={current[res]}
                                     resource={res}
                                     key={i}
                                 />
-                                {order === 1 && (
-                                    <tr>
-                                        <td></td>
-                                        <td>{res}</td>
-                                        <td>{value}</td>
-                                    </tr>
-                                )}
                             </Fragment>
                         ))}
                     </tbody>
