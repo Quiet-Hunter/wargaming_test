@@ -15,7 +15,7 @@ export const formCurrentState = (logObj: Object) => {
     } else {
         current[resource] = { [name]: value };
     }
-    return JSON.stringify(current); // TODO refactoring
+    return JSON.stringify(current);
 };
 
 const parseData = rawData => {
@@ -44,7 +44,7 @@ export const fetchData = (data, setData) => {
         .then(response => response.text())
         .then(rawData => {
             const handledData = parseData(rawData);
-            handledData.pop(); // TODO refactor
+            // handledData.pop(); // TODO refactor
             setData(handledData);
         });
 };

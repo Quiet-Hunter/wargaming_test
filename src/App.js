@@ -36,7 +36,8 @@ function App() {
                             value={{
                                 data,
                                 time,
-                                setTime
+                                setTime,
+                                setData
                             }}
                         >
                             <Slider />

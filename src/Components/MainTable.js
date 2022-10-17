@@ -1,7 +1,8 @@
 import React, { Fragment } from "react";
-import { Table, Spinner } from "react-bootstrap";
+import { Table, Spinner, Button } from "react-bootstrap";
 import { useContext } from "react";
 import { DataContext, resourceNames, usernames } from "../App";
+import { fetchData } from "../utils";
 
 function ResourcePart({ resMap, resource }) {
     // const { usernames } = useContext(DataContext);
@@ -27,7 +28,7 @@ function ResourcePart({ resMap, resource }) {
 }
 
 export function MainTable() {
-    const { data, time } = useContext(DataContext);
+    const { data, time, setData } = useContext(DataContext);
     const current = data ? data[time[0]] : null;
     const sortedResources = [];
     if (current) {
@@ -44,7 +45,20 @@ export function MainTable() {
     }
     return (
         <>
-            {current ? (
+            {!data && (
+                <div
+                    style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        margin: "40px"
+                    }}
+                >
+                    <Spinner animation="border" role="status">
+                        <span className="visually-hidden">Loading...</span>
+                    </Spinner>
+                </div>
+            )}
+            {data && current && (
                 <Table striped bordered hover>
                     <thead>
                         <tr>
@@ -70,7 +84,8 @@ export function MainTable() {
                         ))}
                     </tbody>
                 </Table>
-            ) : (
+            )}
+            {data && !current && (
                 <div
                     style={{
                         display: "flex",
@@ -78,9 +93,13 @@ export function MainTable() {
                         margin: "40px"
                     }}
                 >
-                    <Spinner animation="border" role="status">
-                        <span className="visually-hidden">Loading...</span>
-                    </Spinner>
+                    <Button
+                        variant="primary"
+                        size="lg"
+                        onClick={() => fetchData(data, setData)}
+                    >
+                        Update data
+                    </Button>
                 </div>
             )}
         </>
