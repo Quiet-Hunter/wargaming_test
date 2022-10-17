@@ -19,7 +19,7 @@ While moving the scroller, the table is updated in real time.
 ## Features
 
 -   You can choose the order by pressing on "Value" column header. (Since I found the task a bit shady in explaining which order is supposed to be, I decided to implement this ability).
--   If the scroller is at its maximum timestamp, the Update button appears on the screen. Pushing it allows you to receive actual data. The button implemented to prevent unexpected API-call. User can decide by himself, does he want to refresh data or not.
+-   If the scroller is at its maximum timestamp, the Update button appears on the screen. Pressing it allows you to receive actual data. The button implemented to prevent unexpected API-call. User can decide by himself, does he want to refresh data or not.
 
 ## Performance and Improvements
 
