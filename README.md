@@ -1,70 +1,28 @@
-# Getting Started with Create React App
+# Log Viewer
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## What it is?
 
-## Available Scripts
+An application made on ReactJS for a convinient log observation
 
-In the project directory, you can run:
+## How does it work?
 
-### `npm start`
+This application shows the amount of each resource the users have at a _certain_ moment of time.
+Consists of:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+-   A scroller of all entries from the earliest to the latest timestamp
+-   A table of resources
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+The scroller determines the time for which data is displayed in the table of resources.
+The table of resources displays the total amount of each resource and the amount of each resource each user has.
+While moving the scroller, the table is updated in real time.
 
-### `npm test`
+## Features
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+-   You can choose the order by pressing on "Value" column header. (Since I found the task a bit shady in explaining which order is supposed to be, I decided to implement this ability).
+-   If the scroller is at its maximum timestamp, the Update button appears on the screen. Pushing it allows you to receive actual data. The button implemented to prevent unexpected API-call. User can decide by himself, does he want to refresh data or not.
 
-### `npm run build`
+## Performance and Improvements
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+The application is implemented as it's requiered in the task. I find this way of visualization not very convinient though. Especially when the number of users or resources grows up.
+First of all, I would implement more flexible settings which would allow you to specify which user/resource in which time period has to be rendered in the table.
+Secondly, presentating the data in a single table, where each user corresponds to the current value of the resource seems to me more logical (with an ability to choose any order you want, of course).
