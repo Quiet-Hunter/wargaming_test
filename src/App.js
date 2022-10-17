@@ -36,13 +36,20 @@ function App() {
                             value={{
                                 data,
                                 time,
-                                setTime,
+                                setTime
+                            }}
+                        >
+                            <Slider />
+                        </DataContext.Provider>{" "}
+                        <DataContext.Provider
+                            value={{
+                                data,
+                                time,
                                 setData,
                                 order,
                                 setOrder
                             }}
                         >
-                            <Slider />
                             <MainTable />
                         </DataContext.Provider>
                     </Card.Body>
