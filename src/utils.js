@@ -44,7 +44,6 @@ export const fetchData = (data, setData) => {
         .then(response => response.text())
         .then(rawData => {
             const handledData = parseData(rawData);
-            // handledData.pop(); // TODO refactor
             setData(handledData);
         });
 };

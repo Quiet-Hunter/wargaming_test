@@ -7,6 +7,7 @@ function showTime(timestamp: number) {
     const date = new Date(timestamp * 1000);
     return date.toDateString() + " " + date.toLocaleTimeString();
 }
+
 export function Slider() {
     const { data, time, setTime } = useContext(DataContext);
     return (

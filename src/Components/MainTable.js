@@ -6,14 +6,10 @@ import { fetchData } from "../utils";
 
 function ResourcePart({ resMap, resource }) {
     const { order } = useContext(DataContext);
-    // const { usernames } = useContext(DataContext);
     const sorted = [];
     usernames.forEach(name => {
         sorted.push([name, resMap && name in resMap ? resMap[name] : 0]);
     });
-    // for (let name in resMap) {
-    //     sorted.push([name, resMap[name]]);
-    // }
     sorted.sort((a, b) => (a[1] - b[1]) * order);
     return sorted.map(([name, value], i) => {
         return (
@@ -65,23 +61,32 @@ export function MainTable() {
                                 style={{ cursor: "pointer" }}
                                 onClick={() => setOrder(order * -1)}
                             >
-                                Value {order == 1 ? "↑" : "↓"}
+                                Value {order == -1 ? "↑" : "↓"}
                             </th>
                         </tr>
                     </thead>
                     <tbody>
                         {sortedResources.map(([res, value], i) => (
                             <Fragment key={i}>
-                                <tr>
-                                    <td></td>
-                                    <td>{res}</td>
-                                    <td>{value}</td>
-                                </tr>
+                                {order == -1 && (
+                                    <tr>
+                                        <td></td>
+                                        <td>{res}</td>
+                                        <td>{value}</td>
+                                    </tr>
+                                )}
                                 <ResourcePart
                                     resMap={current[res]}
                                     resource={res}
                                     key={i}
                                 />
+                                {order == 1 && (
+                                    <tr>
+                                        <td></td>
+                                        <td>{res}</td>
+                                        <td>{value}</td>
+                                    </tr>
+                                )}
                             </Fragment>
                         ))}
                     </tbody>

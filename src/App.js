@@ -7,7 +7,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { Slider } from "./Components/Slider";
 import { MainTable } from "./Components/MainTable";
 import { fetchData } from "./utils";
-import "./App.css";
 
 export const DataContext = createContext();
 
@@ -26,7 +25,7 @@ function App() {
         }
     }, []);
     return (
-        <div className="py-5" style={{ maxWidth: "1200px" }}>
+        <div className="py-5" style={{ maxWidth: "1200px", margin: "auto" }}>
             <div className="justify-content-center">
                 <Card>
                     <Card.Body>
