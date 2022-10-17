@@ -17,6 +17,7 @@ export const resourceNames = [];
 function App() {
     const [data, setData] = useState(null);
     const [time, setTime] = useState([0]);
+    const [order, setOrder] = useState(-1);
     const hasFetchedData = useRef(false);
     useEffect(() => {
         if (hasFetchedData.current === false) {
@@ -37,7 +38,9 @@ function App() {
                                 data,
                                 time,
                                 setTime,
-                                setData
+                                setData,
+                                order,
+                                setOrder
                             }}
                         >
                             <Slider />

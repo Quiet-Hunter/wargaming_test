@@ -5,6 +5,7 @@ import { DataContext, resourceNames, usernames } from "../App";
 import { fetchData } from "../utils";
 
 function ResourcePart({ resMap, resource }) {
+    const { order } = useContext(DataContext);
     // const { usernames } = useContext(DataContext);
     const sorted = [];
     usernames.forEach(name => {
@@ -13,9 +14,7 @@ function ResourcePart({ resMap, resource }) {
     // for (let name in resMap) {
     //     sorted.push([name, resMap[name]]);
     // }
-    sorted.sort(function (a, b) {
-        return b[1] - a[1];
-    });
+    sorted.sort((a, b) => (a[1] - b[1]) * order);
     return sorted.map(([name, value], i) => {
         return (
             <tr key={i}>
@@ -28,7 +27,7 @@ function ResourcePart({ resMap, resource }) {
 }
 
 export function MainTable() {
-    const { data, time, setData } = useContext(DataContext);
+    const { data, time, setData, order, setOrder } = useContext(DataContext);
     const current = data ? data[time[0]] : null;
     const sortedResources = [];
     if (current) {
@@ -39,9 +38,7 @@ export function MainTable() {
                     : 0;
             sortedResources.push([resource, summ]);
         });
-        sortedResources.sort(function (a, b) {
-            return b[1] - a[1];
-        });
+        sortedResources.sort((a, b) => (a[1] - b[1]) * order);
     }
     return (
         <>
@@ -64,7 +61,12 @@ export function MainTable() {
                         <tr>
                             <th>Name</th>
                             <th>Resouce</th>
-                            <th>Value</th>
+                            <th
+                                style={{ cursor: "pointer" }}
+                                onClick={() => setOrder(order * -1)}
+                            >
+                                Value {order == 1 ? "↑" : "↓"}
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
