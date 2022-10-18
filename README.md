@@ -24,5 +24,5 @@ While moving the scroller, the table is updated in real time.
 ## Performance and Improvements
 
 The application is implemented as it's requiered in the task. I find this way of visualization not very convinient though. Especially when the number of users or resources grows up.
-First of all, I would implement more flexible settings which would allow you to specify which users/resources has to be rendered in the table.
+First of all, I would implement more flexible settings which would allow you to specify which users/resources have to be rendered in the table.
 Secondly, presentating the data in a single table, where each user corresponds to the current value of the resource seems to me more logical (with an ability to choose any order you want, of course).
